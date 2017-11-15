@@ -1,0 +1,58 @@
+{% extends "profile_base.html" %}
+
+{% load bootstrap3 %}
+
+
+
+
+{% block content %}
+ <a href="{%url 'userprofile:profile_students_create' %}" class="btn btn-default btn-sm">Add Students</a><br>
+
+<h3>M.Tech. Students Ongoing</h3>
+{% for std in Students_required_list %}
+    {% if std.Student_category == 0 %}
+      <li><a href="{%url 'userprofile:profile_students_edit' std.username std.id %}">Scholar Name : {{ std.Student_name }}<br>
+      </a>
+      <a href="{%url 'userprofile:profile_students_delete' std.username std.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
+    </a>
+      </li>
+    {% endif %}
+{% endfor %}
+<hr>
+<h3>M.Tech. Students Completed</h3>
+{% for std in Students_required_list %}
+    {% if std.Student_category == 1 %}
+      <li><a href="{%url 'userprofile:profile_students_edit' std.username std.id %}">Scholar Name : {{ std.Student_name }}</a><br>
+          Thesis title : {{ std.Thesis_title }}<br>
+          Supervisors  : {{ std.Supervisors }}<br>
+          <a href="{%url 'userprofile:profile_students_delete' std.username std.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
+        </a>
+      </li>
+
+    {% endif %}
+{% endfor %}
+<hr>
+<h3>PH.D. Students Ongoing</h3>
+{% for std in Students_required_list %}
+    {% if std.Student_category == 2 %}
+      <li><a href="{%url 'userprofile:profile_students_edit' std.username std.id %}">Scholar Name : {{ std.Student_name }}</a><br>
+      </li>
+      <a href="{%url 'userprofile:profile_students_delete' std.username std.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
+    </a>
+    {% endif %}
+{% endfor %}
+<hr>
+<h3>PH.D. Students Completed</h3>
+{% for std in Students_required_list %}
+    {% if std.Student_category == 3 %}
+      <li><a href="{%url 'userprofile:profile_students_edit' std.username std.id %}">Scholar Name : {{ std.Student_name }}</a><br>
+          Thesis title : {{ std.Thesis_title }}<br>
+          Supervisors  : {{ std.Supervisors }}<br>
+          <a href="{%url 'userprofile:profile_students_delete' std.username std.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
+        </a>
+      </li>
+    {% endif %}
+{% endfor %}
+<hr>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "profile_base.html" %}
+
+{% block content %}
+
+<a href="url 'userprofile:profile_publications_create' %}" class="btn btn-default btn-sm">Add Publications</a>
+
+<h3>Publications</h3>
+{%  for publications_required_list in Publications_required_list  %}
+      {% if publications_required_list.Type == 0 %}
+          <li><a href="{%url 'userprofile:profile_publications_edit' publications_required_list.username publications_required_list.id %}">{{ publications_required_list.Description }}</li>
+      {% else %}
+      {% endif %}
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "profile_base.html" %}
+
+
+{% block content %}
+<a href="url 'userprofile:profile_recognitions_create' %}" class="btn btn-default btn-sm">Add Recognitions</a>
+{% for recognitions_required_list in Recognitions_required_list %}
+    <li>{{ recognitions_required_list.Description }}</li><br>
+{% endfor %}
+{% endblock %}
