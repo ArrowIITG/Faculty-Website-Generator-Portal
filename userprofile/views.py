@@ -18,6 +18,14 @@ user = get_user_model()
 def Departmentwise_list(request , slug):
     required_list = About_us.objects.filter(username__xyz__Department = slug).order_by('username__username')
     if request.method == "POST":
+        if request.POST['search']=='':
+            context={
+                'Departmentwise_list':Required_list,
+                'Department':slug
+            }
+            return render(request, 'userprofile/Homepage.html', context)
+
+
         search_args = []
         for term in request.POST['search'].split():
             for query in ('username__first_name__istartswith', 'username__last_name__istartswith'):
@@ -34,7 +42,7 @@ def Departmentwise_list(request , slug):
     else :
         context={
             'Departmentwise_list':required_list,
-            'Department':slug
+            'Department':slug,
         }
         return render(request, 'userprofile/Homepage.html', context)
 
@@ -187,6 +195,10 @@ def Teaching_delete(request , slug , pk):
 def Students_view_logout_user(request , slug ):
         Students_required_list = Students.objects.filter(username__username = slug).order_by('Student_name')
         about_us = About_us.objects.get(username__username = slug)
+        mtech_cont = Students_required_list.filter(Student_category=0)
+        mtech_ongo = Students_required_list.filter(Student_category=1)
+        phd_cont = Students_required_list.filter(Student_category=2)
+        phd_onog = Students_required_list.filter(Student_category=3)
 
         if str(request.user) == str(slug):
             context = {
@@ -194,6 +206,10 @@ def Students_view_logout_user(request , slug ):
                 'about_us':about_us,
                 'username':True,
                 'username_name':slug,
+                'mtech_cont':mtech_cont,
+                'mtech_ongo':mtech_ongo,
+                'phd_cont':phd_cont,
+                'phd_onog':phd_onog,
             }
         else :
             context = {
@@ -201,6 +217,10 @@ def Students_view_logout_user(request , slug ):
                 'about_us':about_us,
                 'username':False,
                 'username_name':slug,
+                'mtech_cont':mtech_cont,
+                'mtech_ongo':mtech_ongo,
+                'phd_cont':phd_cont,
+                'phd_onog':phd_onog,
             }
 
         return render(request, 'userprofile/detail_students_logout_user.html' , context )
@@ -210,6 +230,10 @@ def Students_view_logout_user(request , slug ):
 def Students_view(request , slug ):
         Students_required_list = Students.objects.filter(username__username = slug).order_by('Student_name')
         about_us = About_us.objects.get(username__username = slug)
+        mtech_cont = Students_required_list.filter(Student_category=0)
+        mtech_ongo = Students_required_list.filter(Student_category=1)
+        phd_cont = Students_required_list.filter(Student_category=2)
+        phd_onog = Students_required_list.filter(Student_category=3)
 
 
         if str(request.user) == str(slug):
@@ -218,6 +242,10 @@ def Students_view(request , slug ):
                 'about_us':about_us,
                 'username':True,
                 'username_name':slug,
+                'mtech_cont':mtech_cont,
+                'mtech_ongo':mtech_ongo,
+                'phd_cont':phd_cont,
+                'phd_onog':phd_onog,
             }
         else :
             context = {
@@ -225,6 +253,10 @@ def Students_view(request , slug ):
                 'about_us':about_us,
                 'username':False,
                 'username_name':slug,
+                    'mtech_cont':mtech_cont,
+                    'mtech_ongo':mtech_ongo,
+                    'phd_cont':phd_cont,
+                    'phd_onog':phd_onog,
             }
 
         return render(request, 'userprofile/detail_students.html' , context )
@@ -282,8 +314,6 @@ def Projects_view_logout_user(request , slug ):
 def Projects_view(request , slug ):
     projects_required_list = Projects.objects.filter(username__username = slug).order_by('Start_year')
     about_us = About_us.objects.get(username__username = slug)
-
-
     context = {
         'Projects_required_list':projects_required_list,
         'about_us':about_us,
@@ -303,7 +333,10 @@ def Projects_create(request):
             return redirect('userprofile:profile_projects', slug=request.user.username)
     else:
         form = projects_form()
-        return render(request , 'userprofile/projects_edit.html' , {'form':form})
+        context = {
+            'form':form,
+        }
+        return render(request , 'userprofile/projects_edit.html' , context )
 
 
 @login_required(login_url="/accounts/login/")
@@ -331,11 +364,16 @@ def Projects_delete(request , slug , pk):
 def Publications_view_logout_user(request , slug ):
     publications_required_list = Publications.objects.filter(username__username = slug)
     about_us = About_us.objects.get(username__username = slug)
+    pub_pub = publications_required_list.filter(type=0)
+    pub_books = publications_required_list.filter(type=1)
+
 
     context = {
         'Publications_required_list':publications_required_list,
         'username_name':slug,
         'about_us':about_us,
+        'pub_pub':pub_pub,
+        'pub_books':pub_books,
     }
     return render(request, 'userprofile/detail_publications_logout_user.html' , context)
 
@@ -343,12 +381,16 @@ def Publications_view_logout_user(request , slug ):
 def Publications_view(request , slug ):
     publications_required_list = Publications.objects.filter(username__username = slug)
     about_us = About_us.objects.get(username__username = slug)
+    pub_pub = publications_required_list.filter(Type=0)
+    pub_books = publications_required_list.filter(Type=1)
 
 
     context = {
         'Publications_required_list':publications_required_list,
-        'about_us':about_us,
         'username_name':slug,
+        'about_us':about_us,
+        'pub_pub':pub_pub,
+        'pub_books':pub_books,
     }
     return render(request, 'userprofile/detail_publications.html' , context)
 
@@ -358,12 +400,12 @@ def Publications_edit(request , slug , pk ):
     publications = Publications.objects.get(username__username = slug , pk=pk)
     if request.user.username == slug:
         if request.method == "POST":
-            form = publications_form(request.POST, instance=projects)
+            form = publications_form(request.POST, instance=publications)
             if form.is_valid():
                 form.save()
                 return redirect('userprofile:profile_publications', slug)
         else:
-            form = projects_form(instance=projects)
+            form = publications_form(instance=publications)
             return render(request , 'userprofile/publications_edit.html' , {'form':form})
     else:
         return HttpResponse("Error. You are not authourized ")

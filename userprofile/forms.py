@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import datetime
 from django.utils import timezone
-from .models import About_us , Teaching , Students , Projects , Publications , Recognitions , CATEGORY
+from .models import About_us , Teaching , Students , Projects , Publications , Recognitions , CATEGORY ,Department_list
 
 
 
 class about_us_form(forms.ModelForm):
     Upload_Profile_Pic = forms.ImageField(label='Choose Image' , required=False)
-    Department = forms.CharField(max_length=60,required=True)
+    Department = forms.CharField(max_length=60,widget=forms.Select(choices= Department_list) , required=True)
     Departmental_post = forms.CharField(max_length=60 , required=True)
     Room_no = forms.CharField(max_length=10 , required=True)
     phone = forms.CharField(max_length=15 , required=True , help_text="+91 must not be added in front")

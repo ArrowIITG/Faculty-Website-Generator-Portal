@@ -86,7 +86,7 @@
 				<a id="menu_toggle"><i class="fa fa-bars"></i></a>
 			</div>
 
-			
+
 	</div>
 </div>
 {% endblock %}
@@ -96,7 +96,7 @@
 
 
 
-
+{% if pub_pub.count != 0 %}
 
 <h3>Publications</h3>
 
@@ -119,6 +119,8 @@
 </div>
 
 <hr>
+{% endif %}
+{% if pub_books.count != 0 %}
 
 <h3>Books</h3>
 
@@ -140,5 +142,5 @@
 </div>
 
 <hr>
-
+{% endif %}
 {% endblock %}

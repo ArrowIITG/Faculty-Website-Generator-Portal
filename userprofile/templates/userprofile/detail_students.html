@@ -16,9 +16,11 @@
 
  <a href="{%url 'userprofile:profile_students_create' %}" class="btn btn-default btn-sm">Add Students</a><br>
 
-
+ {% if mtech_cont.count != 0 %}
  <table class="table table-striped">
+
    <h3>M.Tech. Students Ongoing</h3>
+
    <thead>
      <tr>
        <th scope="col">Student Name</th>
@@ -52,12 +54,14 @@
 
    </tbody>
  </table>
+ <hr>
+
+ {% endif %}
 
 
-<hr>
 
 
-
+ {% if mtech_ongo.count != 0 %}
 <table class="table table-striped">
 <h3>M.Tech. Students Completed</h3>
   <thead>
@@ -98,13 +102,14 @@
 
 
   </tbody>
-</table>
+</table><hr>
+
+{% endif %}
 
 
-<hr>
 
 
-
+ {% if phd_cont.count != 0 %}
 <table class="table table-striped">
 <h3>PH.D. Students Ongoing</h3>
   <thead>
@@ -121,7 +126,7 @@
             </a>
 
         </td>
-        
+
         <td align="right">
 
           <a href="{%url 'userprofile:profile_students_edit' std.username std.id %} " style="color:red">
@@ -138,8 +143,11 @@
 
   </tbody>
 </table>
+{% endif %}
 
+ {% if phd_onog.count != 0 %}
 <hr>
+
 <table class="table table-striped">
 <h3>PH.D. Students Completed</h3>
   <thead>
@@ -184,5 +192,6 @@
 
 
 <hr>
+{% endif %}
 
 {% endblock %}

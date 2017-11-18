@@ -3,7 +3,7 @@
 {% block content %}
 
 
-
+{% if pub_pub.count != 0 %}
 <h3>Publications</h3>
 
 
@@ -25,6 +25,11 @@
 </div>
 
 <hr>
+{% endif %}
+
+
+{% if pub_books.count != 0 %}
+
 
 <h3>Books</h3>
 
@@ -46,6 +51,7 @@
 </div>
 
 <hr>
+{% endif  %}
 <a href="{% url 'userprofile:profile_publications_create' %}" class="btn btn-default btn-sm">Add Publications / Books</a>
 
 {% endblock %}

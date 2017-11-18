@@ -8,11 +8,25 @@ from django.utils import timezone
 
 # Create your models here.
 
+Department_list = (
+    ('Biosciences_and_Bioengineering','Biosciences and Bioengineering'),
+    ('Chemical_Engineering',' Chemical Engineering'),
+    ('Chemistry','Chemistry'),
+    ('Computer_Science_and_Engineering','Computer Science and Engineering'),
+    ('Civil_Engineering','Civil Engineering'),
+    ('Design','Design'),
+    ('Humanity_and_Social_Sciences' , 'Humanity and Social Sciences'),
+    ('Electronics_and_Electrical_Engineering ',' Electronics and Electrical Engineering '),
+    ('Mathematics','Mathematics'),
+    ('Mechanical_Engineering','Mechanical Engineering'),
+    ('Physics','Physics')
+)
+
 class About_us(models.Model):
     username = models.OneToOneField(User , on_delete=models.CASCADE,primary_key=True,related_name="xyz",)
     slug = models.SlugField(null=True, blank=True , unique=True)
     Upload_Profile_Pic = models.ImageField(upload_to='uploads' ,null=True , blank=True)
-    Department = models.CharField(max_length=200)
+    Department = models.CharField(max_length=200,choices=Department_list, default=None,null=True , blank=True)
     Departmental_post = models.CharField(max_length=200)
     Room_no = models.CharField(max_length=200)
     phone = models.CharField(max_length=200)
