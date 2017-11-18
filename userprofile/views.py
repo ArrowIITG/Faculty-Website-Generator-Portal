@@ -16,35 +16,75 @@ user = get_user_model()
 # Create your views here.
 
 def Departmentwise_list(request , slug):
-    required_list = About_us.objects.filter(username__xyz__Department = slug).order_by('username__username')
-    if request.method == "POST":
-        if request.POST['search']=='':
-            context={
-                'Departmentwise_list':Required_list,
-                'Department':slug
-            }
-            return render(request, 'userprofile/Homepage.html', context)
+        required_list = About_us.objects.filter(username__xyz__Department = slug).order_by('username__username')
+
+        print(request.user)
+
+        if request.user.is_authenticated():
+
+            about_us = About_us.objects.get(username__username = request.user.username)
+
+            if request.method == "POST":
+                if request.POST['search']=='':
+                    context ={
+                        'Departmentwise_list':required_list,
+                        'Department':slug,
+                        'about_us':about_us,
+                    }
+                    return render(request, 'userprofile/Homepage.html', context)
 
 
-        search_args = []
-        for term in request.POST['search'].split():
-            for query in ('username__first_name__istartswith', 'username__last_name__istartswith'):
-                search_args.append(Q(**{query: term}))
+                search_args = []
+                for term in request.POST['search'].split():
+                    for query in ('username__first_name__istartswith', 'username__last_name__istartswith'):
+                        search_args.append(Q(**{query: term}))
 
-        Required_list = required_list.filter(functools.reduce(operator.or_, search_args))
+                Required_list = required_list.filter(functools.reduce(operator.or_, search_args))
 
-        context={
-            'Departmentwise_list':Required_list,
-            'Department':slug
-        }
-        return render(request, 'userprofile/Homepage.html', context)
+                context ={
+                    'Departmentwise_list':Required_list,
+                    'Department':slug,
+                    'about_us':about_us,
+                }
+                return render(request, 'userprofile/Homepage.html', context)
 
-    else :
-        context={
-            'Departmentwise_list':required_list,
-            'Department':slug,
-        }
-        return render(request, 'userprofile/Homepage.html', context)
+            else :
+                context ={
+                    'Departmentwise_list':required_list,
+                    'Department':slug,
+                    'about_us':about_us,
+                }
+                return render(request, 'userprofile/Homepage.html', context)
+        else:
+            if request.method == "POST":
+                if request.POST['search']=='':
+                    context ={
+                        'Departmentwise_list':required_list,
+                        'Department':slug,
+                    }
+                    return render(request, 'userprofile/Homepage.html', context)
+
+
+                search_args = []
+                for term in request.POST['search'].split():
+                    for query in ('username__first_name__istartswith', 'username__last_name__istartswith'):
+                        search_args.append(Q(**{query: term}))
+
+                Required_list = required_list.filter(functools.reduce(operator.or_, search_args))
+
+                context ={
+                    'Departmentwise_list':Required_list,
+                    'Department':slug,
+                }
+                return render(request, 'userprofile/Homepage.html', context)
+
+            else :
+                context ={
+                    'Departmentwise_list':required_list,
+                    'Department':slug,
+                }
+                return render(request, 'userprofile/Homepage.html', context)
+
 
 
 
@@ -364,8 +404,8 @@ def Projects_delete(request , slug , pk):
 def Publications_view_logout_user(request , slug ):
     publications_required_list = Publications.objects.filter(username__username = slug)
     about_us = About_us.objects.get(username__username = slug)
-    pub_pub = publications_required_list.filter(type=0)
-    pub_books = publications_required_list.filter(type=1)
+    pub_pub = publications_required_list.filter(Type=0)
+    pub_books = publications_required_list.filter(Type=1)
 
 
     context = {
