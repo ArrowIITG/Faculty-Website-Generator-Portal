@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 
 
+
 {% block content_side_nav %}
 
 <div class="col-md-3 left_col">
@@ -180,45 +181,159 @@
 
 
 
+
 {% block content %}
+<style media="screen">
+#act{
+  float:right;
+  align:right;
+}
+
+</style>
 
 
-<h3>M.Tech. Students Ongoing</h3>
-{% for std in Students_required_list %}
-    {% if std.Student_category == 0 %}
-      <li>Scholar Name : {{ std.Student_name }}<br>
-      </li>
-    {% endif %}
-{% endfor %}
+
+
+ <table class="table table-striped">
+   <h3>M.Tech. Students Ongoing</h3>
+   <thead>
+     <tr>
+       <th scope="col">Student Name</th>
+
+
+     </tr>
+   </thead>
+   <tbody>
+     {% for std in Students_required_list %}
+     <tr>
+           {% if std.Student_category == 0 %}
+             <td><a>Scholar Name : {{ std.Student_name }}<br>
+             </a>
+
+         </td>
+
+
+
+           {% endif %}
+      </tr>
+       {% endfor %}
+
+
+   </tbody>
+ </table>
+
+
 <hr>
+
+
+
+<table class="table table-striped">
 <h3>M.Tech. Students Completed</h3>
-{% for std in Students_required_list %}
-    {% if std.Student_category == 1 %}
-      <li>Scholar Name : {{ std.Student_name }}<br>
-          Thesis title : {{ std.Thesis_title }}<br>
-          Supervisors  : {{ std.Supervisors }}<br>
-      </li>
+  <thead>
+    <tr>
+      <th scope="col">Student Name</th>
+      <th scope="col">Thesis Title</th>
+      <th scope="col">Supervisors</th>
 
-    {% endif %}
-{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for std in Students_required_list %}
+    <tr>
+          {% if std.Student_category == 1 %}
+            <td><a>Scholar Name : {{ std.Student_name }}<br>
+            </a>
+
+        </td>
+        <td>
+             {{ std.Thesis_title }}
+        </td>
+
+        <td>
+            {{ std.Supervisors }}
+        </td>
+
+          {% endif %}
+     </tr>
+      {% endfor %}
+
+
+  </tbody>
+</table>
+
+
 <hr>
+
+
+
+<table class="table table-striped">
 <h3>PH.D. Students Ongoing</h3>
-{% for std in Students_required_list %}
-    {% if std.Student_category == 2 %}
-      <li>Scholar Name : {{ std.Student_name }}<br>
-      </li>
-    {% endif %}
-{% endfor %}
+  <thead>
+    <tr>
+      <th scope="col">Student Name</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for std in Students_required_list %}
+    <tr>
+          {% if std.Student_category == 2 %}
+            <td><a >Scholar Name : {{ std.Student_name }}<br>
+            </a>
+
+        </td>
+        <td></td><td></td>
+
+          {% endif %}
+     </tr>
+      {% endfor %}
+
+
+  </tbody>
+</table>
+
 <hr>
+<table class="table table-striped">
 <h3>PH.D. Students Completed</h3>
-{% for std in Students_required_list %}
-    {% if std.Student_category == 3 %}
-      <li>Scholar Name : {{ std.Student_name }}<br>
-          Thesis title : {{ std.Thesis_title }}<br>
-          Supervisors  : {{ std.Supervisors }}<br>
-      </li>
-    {% endif %}
-{% endfor %}
+  <thead>
+    <tr>
+      <th scope="col">Student Name</th>
+
+				 <th scope="col">Thesis Title</th>
+
+
+      <th scope="col">Supervisors</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for std in Students_required_list %}
+    <tr>
+          {% if std.Student_category == 3 %}
+            <td><a>Scholar Name : {{ std.Student_name }}<br>
+            </a>
+
+        </td>
+
+
+						  <td >
+             {{ std.Thesis_title }}
+					 </td>
+
+
+        <td>
+            {{ std.Supervisors }}
+        </td>
+
+          {% endif %}
+     </tr>
+      {% endfor %}
+
+
+  </tbody>
+</table>
+
+
 <hr>
 
 {% endblock %}

@@ -115,3 +115,8 @@ class Recognitions(models.Model):
 
     def __str__(self):
         return self.username.username
+
+
+class Mail(models.Model):
+    webmail = models.ForeignKey(User)
+    mailInfo = models.TextField(blank=True,null=True)

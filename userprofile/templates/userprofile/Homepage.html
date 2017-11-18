@@ -50,7 +50,7 @@
 			<a data-toggle="tooltip" data-placement="top" title="Lock">
 				<span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
 			</a>
-			<a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+			<a data-toggle="tooltip" data-placement="top" title="Logout" href="#">
 				<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 			</a>
 		</div>
@@ -61,6 +61,7 @@
 {% endblock %}
 
 {% block content_top_nav %}
+{% if user.is_authenticated %}
 <div class="top_nav">
 	<div class="nav_menu">
 		<nav>
@@ -71,7 +72,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class="">
 					<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<img src="images/img.jpg" alt="">John Doe
+						<img src="{{ about_us.Upload_Profile_Pic.url  }}" alt="">{{ about_us.get_full_name  }}
 						<span class=" fa fa-angle-down"></span>
 					</a>
 					<ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -155,13 +156,35 @@
 		</nav>
 	</div>
 </div>
+{% endif %}
+
 {% endblock %}
 
 
 {% block content %}
 <!-- Profile Image -->
 
-<h1>{{ Department }}</h1>
+
+
+<div class="page-title">
+	<div class="title_left">
+		<h3>{{ Department }}</h3>
+	</div>
+
+	<div class="title_right">
+		<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+			<form method="post" action="{% url 'userprofile:Departmentwise_list' Department %}">
+				{% csrf_token %}
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search for..." name="search">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit">Go!</button>
+				</span>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 
@@ -175,7 +198,7 @@
 
 
 
-    <div class="clearfix"></div>
+    						 			<div class="clearfix"></div>
 
                           <div class="col-md-4 col-sm-4 col-xs-12 profile_details">
                             <div class="well profile_view">
@@ -195,7 +218,7 @@
                                   </ul>
                                 </div>
                                 <div class="right col-xs-5 text-center">
-                                  <img src="images/img.jpg" alt="" class="img-circle img-responsive">
+                                  <img src="{{ required_object.Upload_Profile_Pic.url  }}" alt="" class="img-circle img-responsive">
                                 </div>
                               </div>
                               <div class="col-xs-12 bottom text-center">

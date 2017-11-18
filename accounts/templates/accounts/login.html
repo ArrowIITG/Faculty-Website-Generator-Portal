@@ -40,6 +40,11 @@ window.__cfRocketOptions = {byc:0,p:1510582999,petok:"8be1667fbe3afa382fa231e329
             <form method="POST" action="{% url 'accounts:login' %}">
               <h1>Login Form</h1>
               {% csrf_token %}
+              {% if error_message %}
+
+              <p><strong>{{ error_message }}</strong></p>
+                {% endif %}
+
               <div>
                 <input type="text" class="form-control" name="username" placeholder="Webmail" required="True" />
               </div>
@@ -48,6 +53,8 @@ window.__cfRocketOptions = {byc:0,p:1510582999,petok:"8be1667fbe3afa382fa231e329
               </div>
 
               <div>
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="g-recaptcha" data-sitekey="6LfUKTgUAAAAAOVVrsF_xMlcEdIpvaWe-s2yu68y"></div>
                 <button type="submit" class="btn btn-default" >Login</button>
                 <a class="reset_pass" href="#">Lost your password?</a>
               </div>

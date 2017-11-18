@@ -58,124 +58,11 @@
 		<!-- /sidebar menu -->
 
 		<!-- /menu footer buttons -->
-		<div class="sidebar-footer hidden-small">
-			<a data-toggle="tooltip" data-placement="top" title="Settings">
-				<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-			</a>
-			<a data-toggle="tooltip" data-placement="top" title="FullScreen">
-				<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-			</a>
-			<a data-toggle="tooltip" data-placement="top" title="Lock">
-				<span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-			</a>
-			<a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-				<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-			</a>
-		</div>
-		<!-- /menu footer buttons -->
+
 	</div>
 </div>
 
 {% endblock %}
-
-{% block content_top_nav %}
-<div class="top_nav">
-	<div class="nav_menu">
-		<nav>
-			<div class="nav toggle">
-				<a id="menu_toggle"><i class="fa fa-bars"></i></a>
-			</div>
-
-			<ul class="nav navbar-nav navbar-right">
-				<li class="">
-					<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<img src="images/img.jpg" alt="">John Doe
-						<span class=" fa fa-angle-down"></span>
-					</a>
-					<ul class="dropdown-menu dropdown-usermenu pull-right">
-						<li><a href="javascript:;"> Profile</a></li>
-						<li>
-							<a href="javascript:;">
-								<span class="badge bg-red pull-right">50%</span>
-								<span>Settings</span>
-							</a>
-						</li>
-						<li><a href="javascript:;">Help</a></li>
-						<li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-					</ul>
-				</li>
-
-				<li role="presentation" class="dropdown">
-					<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-						<i class="fa fa-envelope-o"></i>
-						<span class="badge bg-green">6</span>
-					</a>
-					<ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-						<li>
-							<a>
-								<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-								<span>
-									<span>John Smith</span>
-									<span class="time">3 mins ago</span>
-								</span>
-								<span class="message">
-									Film festivals used to be do-or-die moments for movie makers. They were where...
-								</span>
-							</a>
-						</li>
-						<li>
-							<a>
-								<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-								<span>
-									<span>John Smith</span>
-									<span class="time">3 mins ago</span>
-								</span>
-								<span class="message">
-									Film festivals used to be do-or-die moments for movie makers. They were where...
-								</span>
-							</a>
-						</li>
-						<li>
-							<a>
-								<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-								<span>
-									<span>John Smith</span>
-									<span class="time">3 mins ago</span>
-								</span>
-								<span class="message">
-									Film festivals used to be do-or-die moments for movie makers. They were where...
-								</span>
-							</a>
-						</li>
-						<li>
-							<a>
-								<span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-								<span>
-									<span>John Smith</span>
-									<span class="time">3 mins ago</span>
-								</span>
-								<span class="message">
-									Film festivals used to be do-or-die moments for movie makers. They were where...
-								</span>
-							</a>
-						</li>
-						<li>
-							<div class="text-center">
-								<a>
-									<strong>See All Alerts</strong>
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</nav>
-	</div>
-</div>
-{% endblock %}
-
-
 
 
 {% block content %}
@@ -251,7 +138,7 @@
                         <tr>
                           <td>#</td>
                           <td>
-                            {% if projects_required_list.Project_Type == 0 %}
+                            {% if projects_required_list.Project_Type %}
           <li><a href="{%url 'userprofile:profile_projects_edit' projects_required_list.username projects_required_list.id %}">Project title : {{ projects_required_list.Project_title }}</a><br>
               Project Type  : {{ projects_required_list.Project_Type }}<br>
                         PI  : {{ projects_required_list.PI  }}<br>
@@ -263,24 +150,28 @@
             {% if End_Year != null %}:
                   End Year  : {{ projects_required_list.End_Year }} <br>
             {% endif %}
-            <a href="{%url 'userprofile:profile_projects_delete' projects_required_list.username projects_required_list.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
-          </a>
+
           </li>
+
       {% else %}
-      <li><a href="{%url 'userprofile:profile_projects_edit' projects_required_list.username projects_required_list.id %}">Project title : {{ projects_required_list.Project_title }}</a><br>
-          Project Type  : {{ projects_required_list.Project_Type }}<br>
-                    PI  : {{ projects_required_list.PI  }}<br>
+			<ol>
+      <li>Project title : {{ projects_required_list.Project_title }}</li><br>
+						{% if  projects_required_list.Project_Type == False %}
+			        <li>  Project Type  : Consultancy Research Projects</li><br>
+						{% else %}
+							<li>  Project Type  : Sponsored Research Projects</li><br>
+						{% endif %}
+          <li>          PI  : {{ projects_required_list.PI  }}</li><br>
             {% if co_PI != null %}:
-                 co-PI  : {{ projects_required_list.co_PI }} <br>
+      <li>           co-PI  : {{ projects_required_list.co_PI }} </li><br>
             {% endif %}
-        Funding Agency  : {{ projects_required_list.Funding_Agency  }}<br>
-            Start year  : {{projects_required_list.Start_year}}<br>
-        {% if End_Year != null %}:
-              End Year  : {{ projects_required_list.End_Year }} <br>
-        {% endif %}
-        <a href="{%url 'userprofile:profile_projects_delete' projects_required_list.username projects_required_list.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a>
-      </a>
-      </li>
+      <li>  Funding Agency  : {{ projects_required_list.Funding_Agency  }}</li><br>
+      <li>      Start year  : {{projects_required_list.Start_year}}</li><br>
+		        {% if End_Year != null %}:
+		        <li>      End Year  : {{ projects_required_list.End_Year }}</li> <br>
+		        {% endif %}
+
+
       {% endif %}
                           </td>
                           <td>
@@ -320,7 +211,7 @@
                     <!-- end project list -->
                     <hr>
 
-                    <a href="{%url 'userprofile:profile_projects_create' %}" class="btn btn-default">Add Projects</a>
+
 
                   </div>
                 </div>

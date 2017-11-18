@@ -8,17 +8,35 @@ from django.shortcuts import get_object_or_404
 from .forms import about_us_form , teaching_form , students_form , projects_form , publications_form , recognitions_form
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+import operator
+from django.db.models import Q
+import functools
 
 user = get_user_model()
 # Create your views here.
 
 def Departmentwise_list(request , slug):
-    required_list = About_us.objects.filter(username__xyz__Department = slug)
-    context={
-        'Departmentwise_list':required_list,
-        'Department':slug
-    }
-    return render(request, 'userprofile/Homepage.html', context)
+    required_list = About_us.objects.filter(username__xyz__Department = slug).order_by('username__username')
+    if request.method == "POST":
+        search_args = []
+        for term in request.POST['search'].split():
+            for query in ('username__first_name__istartswith', 'username__last_name__istartswith'):
+                search_args.append(Q(**{query: term}))
+
+        Required_list = required_list.filter(functools.reduce(operator.or_, search_args))
+
+        context={
+            'Departmentwise_list':Required_list,
+            'Department':slug
+        }
+        return render(request, 'userprofile/Homepage.html', context)
+
+    else :
+        context={
+            'Departmentwise_list':required_list,
+            'Department':slug
+        }
+        return render(request, 'userprofile/Homepage.html', context)
 
 
 
@@ -76,20 +94,22 @@ def About_us_edit(request , slug):
 
 
 def Teaching_view_logout_user(request , slug ):
-    Teaching_required_list = Teaching.objects.filter(username__username = slug)
-    print(request.user)
-    print(str(slug))
+    Teaching_required_list = Teaching.objects.filter(username__username = slug).order_by('year')
+    about_us = About_us.objects.get(username__username = slug)
+
 
 
     if str(request.user) == str(slug):
         context = {
             'Teaching_Object_list':Teaching_required_list,
+            'about_us':about_us,
             'username':True,
             'username_name':slug,
         }
     else :
         context = {
             'Teaching_Object_list':Teaching_required_list,
+            'about_us':about_us,
             'username':False,
             'username_name':slug,
         }
@@ -99,7 +119,9 @@ def Teaching_view_logout_user(request , slug ):
 
 @login_required(login_url="/accounts/login/")
 def Teaching_view(request , slug ):
-    Teaching_required_list = Teaching.objects.filter(username__username = slug)
+    Teaching_required_list = Teaching.objects.filter(username__username = slug).order_by('year')
+    about_us = About_us.objects.get(username__username = slug)
+
     print(request.user)
     print(str(slug))
 
@@ -107,12 +129,14 @@ def Teaching_view(request , slug ):
     if str(request.user) == str(slug):
         context = {
             'Teaching_Object_list':Teaching_required_list,
+            'about_us':about_us,
             'username':True,
             'username_name':slug,
         }
     else :
         context = {
             'Teaching_Object_list':Teaching_required_list,
+            'about_us':about_us,
             'username':False,
             'username_name':slug,
         }
@@ -161,17 +185,20 @@ def Teaching_delete(request , slug , pk):
 
 
 def Students_view_logout_user(request , slug ):
-        Students_required_list = Students.objects.filter(username__username = slug)
+        Students_required_list = Students.objects.filter(username__username = slug).order_by('Student_name')
+        about_us = About_us.objects.get(username__username = slug)
 
         if str(request.user) == str(slug):
             context = {
                 'Students_required_list':Students_required_list,
+                'about_us':about_us,
                 'username':True,
                 'username_name':slug,
             }
         else :
             context = {
                 'Students_required_list':Students_required_list,
+                'about_us':about_us,
                 'username':False,
                 'username_name':slug,
             }
@@ -181,17 +208,21 @@ def Students_view_logout_user(request , slug ):
 
 @login_required(login_url="/accounts/login/")
 def Students_view(request , slug ):
-        Students_required_list = Students.objects.filter(username__username = slug)
+        Students_required_list = Students.objects.filter(username__username = slug).order_by('Student_name')
+        about_us = About_us.objects.get(username__username = slug)
+
 
         if str(request.user) == str(slug):
             context = {
                 'Students_required_list':Students_required_list,
+                'about_us':about_us,
                 'username':True,
                 'username_name':slug,
             }
         else :
             context = {
                 'Students_required_list':Students_required_list,
+                'about_us':about_us,
                 'username':False,
                 'username_name':slug,
             }
@@ -237,20 +268,25 @@ def Students_delete(request , slug , pk):
 
 
 def Projects_view_logout_user(request , slug ):
-    projects_required_list = Projects.objects.filter(username__username = slug)
+    projects_required_list = Projects.objects.filter(username__username = slug).order_by('Start_year')
+    about_us = About_us.objects.get(username__username = slug)
 
     context = {
         'Projects_required_list':projects_required_list,
         'username_name':slug,
+        'about_us':about_us,
     }
     return render(request, 'userprofile/detail_projects_logout_user.html' , context)
 
 @login_required(login_url="/accounts/login/")
 def Projects_view(request , slug ):
-    projects_required_list = Projects.objects.filter(username__username = slug)
+    projects_required_list = Projects.objects.filter(username__username = slug).order_by('Start_year')
+    about_us = About_us.objects.get(username__username = slug)
+
 
     context = {
         'Projects_required_list':projects_required_list,
+        'about_us':about_us,
         'username_name':slug,
     }
     return render(request, 'userprofile/detail_projects.html' , context)
@@ -294,19 +330,24 @@ def Projects_delete(request , slug , pk):
 
 def Publications_view_logout_user(request , slug ):
     publications_required_list = Publications.objects.filter(username__username = slug)
+    about_us = About_us.objects.get(username__username = slug)
 
     context = {
         'Publications_required_list':publications_required_list,
         'username_name':slug,
+        'about_us':about_us,
     }
     return render(request, 'userprofile/detail_publications_logout_user.html' , context)
 
 @login_required(login_url="/accounts/login/")
 def Publications_view(request , slug ):
     publications_required_list = Publications.objects.filter(username__username = slug)
+    about_us = About_us.objects.get(username__username = slug)
+
 
     context = {
         'Publications_required_list':publications_required_list,
+        'about_us':about_us,
         'username_name':slug,
     }
     return render(request, 'userprofile/detail_publications.html' , context)
@@ -346,10 +387,12 @@ def Publications_create(request):
 
 def Recognitions_view_logout_user(request , slug ):
     recognitions_required_list = Recognitions.objects.filter(username__username = slug)
+    about_us = About_us.objects.get(username__username = slug)
 
     context = {
         'Recognitions_required_list':recognitions_required_list,
         'username_name':slug,
+        'about_us':about_us,
     }
     return render(request, 'userprofile/detail_recognitions_logout_user.html' , context)
 
@@ -357,9 +400,12 @@ def Recognitions_view_logout_user(request , slug ):
 @login_required(login_url="/accounts/login/")
 def Recognitions_view(request , slug ):
     recognitions_required_list = Recognitions.objects.filter(username__username = slug)
+    about_us = About_us.objects.get(username__username = slug)
+
 
     context = {
         'Recognitions_required_list':recognitions_required_list,
+        'about_us':about_us,
         'username_name':slug,
     }
     return render(request, 'userprofile/detail_recognitions.html' , context)

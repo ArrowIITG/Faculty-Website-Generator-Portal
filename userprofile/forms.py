@@ -8,8 +8,6 @@ from .models import About_us , Teaching , Students , Projects , Publications , R
 
 
 
-
-
 class about_us_form(forms.ModelForm):
     Upload_Profile_Pic = forms.ImageField(label='Choose Image' , required=False)
     Department = forms.CharField(max_length=60,required=True)

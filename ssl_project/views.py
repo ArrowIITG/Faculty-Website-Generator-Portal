@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from userprofile.models import About_us
 
 
 
@@ -11,7 +12,7 @@ class TestPage(TemplateView):
     template_name = "test.html"
 
 class ThanksPage(TemplateView):
-    template_name = 'thanks.html'
+    template_name = 'index.html'
 
 class HomePage(TemplateView):
     template_name = "index.html"
@@ -19,8 +20,10 @@ class HomePage(TemplateView):
     def get(self, request, *args, **kwargs):
         if request.method == 'GET':
             if request.user.is_authenticated():
-                context={
-                    'user':request.user
+                context  = {
+                    'about_us':About_us.objects.get(username__username = request.user),
+                    'username_name':request.user,
                 }
-                return render(request , "test.html" , context)
+                return render(request, 'userprofile/detail_about_us.html' , context )
+
         return super().get(request, *args, **kwargs)
