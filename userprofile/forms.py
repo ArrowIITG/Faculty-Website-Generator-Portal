@@ -58,10 +58,12 @@ class projects_form(forms.ModelForm):
     PI = forms.CharField(max_length=2000 , required=True)
     co_PI = forms.CharField(max_length=2000 , required=False)
     Funding_Agency = forms.CharField(max_length=2000 , required=True)
+    Progress = forms.IntegerField(required=True)
+    Team_Members = forms.CharField(max_length=2000, required=False)
 
     class Meta:
         model = Projects
-        fields = ('Project_Type', 'Project_title' , 'PI' , 'co_PI' , 'Funding_Agency' , 'Start_year' , 'End_Year' )
+        fields = ('Project_Type', 'Project_title' , 'PI' , 'co_PI' , 'Funding_Agency' , 'Start_year' , 'End_Year', 'Progress' , 'Team_Members' )
 
 
 class publications_form(forms.ModelForm):

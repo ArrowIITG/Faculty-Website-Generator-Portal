@@ -93,6 +93,8 @@ class Projects(models.Model):
     PI = models.CharField(max_length=2000, default=None)
     co_PI =  models.CharField(max_length=2000, null=True, blank=True , default=None)
     Funding_Agency = models.CharField(max_length=2000 ,  null=True, blank=True ,default=None)
+    Team_Members = models.CharField(max_length=2000, blank=True, null=True, default=None)
+    Progress = models.IntegerField(blank=True, null=True)
     START_YEAR_CHOICES = []
     for r in range(1950, (datetime.datetime.now().year+1)):
         s = str(r)+"-"+str(r+1)
@@ -132,5 +134,18 @@ class Recognitions(models.Model):
 
 
 class Mail(models.Model):
-    webmail = models.ForeignKey(User)
-    mailInfo = models.TextField(blank=True,null=True)
+    webmail = models.ForeignKey(User , on_delete=models.CASCADE)
+    mail_info = models.TextField(null=True,blank=True)
+
+class Notification(models.Model):
+    webmail = models.ForeignKey(User , on_delete=models.CASCADE)
+    notify_type = models.CharField(max_length=256,null=True,blank=True)
+    description = models.CharField(max_length=256,null=True,blank=True)
+    flag = models.BooleanField(default=False)
+
+class NewsFeed(models.Model):
+    webmail = models.ForeignKey(User , on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=256)
+    last_name = models.CharField(max_length=256)
+    description = models.CharField(max_length=256)
+    created = models.DateTimeField()

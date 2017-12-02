@@ -43,10 +43,20 @@ urlpatterns = [
     url(r'^(?P<slug>[\w.@+-]+)/publications_user$', views.Publications_view ,name='profile_publications'),
     url(r'^(?P<slug>[\w.@+-]+)/publications$', views.Publications_view_logout_user ,name='profile_publications_logout_user'),
     url(r'^(?P<slug>[\w.@+-]+)/publications/(?P<pk>[0-9]+)/edit$', views.Publications_edit ,name='profile_publications_edit'),
+    url(r'^(?P<slug>[\w.@+-]+)/publications/(?P<pk>[0-9]+)/delete$', views.Publications_delete ,name='profile_publications_delete'),
 
 # Recognitions
     url(r'^profile_recognitions$', views.Recognitions_create ,name='profile_recognitions_create'),
     url(r'^(?P<slug>[\w.@+-]+)/recognitions_user$', views.Recognitions_view ,name='profile_recognitions'),
     url(r'^(?P<slug>[\w.@+-]+)/recognitions$', views.Recognitions_view_logout_user ,name='profile_recognitions_logout_user'),
+    url(r'^(?P<slug>[\w.@+-]+)/recognitions/(?P<pk>[0-9]+)/edit$', views.Recognitions_edit ,name='profile_recognitions_edit'),
+    url(r'^(?P<slug>[\w.@+-]+)/recognitions/(?P<pk>[0-9]+)/delete$', views.Recognitions_delete ,name='profile_recognitions_delete'),
+
+
+
+
+
+    url(r'^notifications$', views.notifications ,name='notifications'),
+    url(r'^home$', views.newsFeed ,name='newsFeed'),
 
 ]

@@ -12,6 +12,15 @@
 {% for recognitions_required_list in Recognitions_required_list %}
       <tr>
         <td><li>{{ recognitions_required_list.Description }}</li></td>
+        <td align="right">
+
+          <a href="{% url 'userprofile:profile_recognitions_edit' recognitions_required_list.username recognitions_required_list.id  %}" style="color:red">
+         <button type="button" class="btn btn-success"    >Edit</button></a>
+
+          <a href="{% url 'userprofile:profile_recognitions_delete' recognitions_required_list.username recognitions_required_list.id  %}" style="color:red">
+         <button type="button" class="btn btn-warning"  >Delete</button></a>
+
+       </td>
       </tr>
 
 {% endfor %}

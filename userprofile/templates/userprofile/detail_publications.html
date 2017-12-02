@@ -15,6 +15,18 @@
       <tr>
 
         <td><li><a href="{%url 'userprofile:profile_publications_edit' publications_required_list.username publications_required_list.id %}">{{ publications_required_list.Description }}</li></td>
+
+          <td align="right">
+
+            <a href="{%url 'userprofile:profile_publications_edit' publications_required_list.username publications_required_list.id %}" style="color:red">
+           <button type="button" class="btn btn-success">Edit</button></a>
+
+            <a href="{%url 'userprofile:profile_publications_delete' publications_required_list.username publications_required_list.id %}" style="color:red">
+           <button type="button" class="btn btn-warning">Delete</button></a>
+
+         </td>
+
+
       </tr>
 
 
@@ -41,6 +53,17 @@
       <tr>
 
        <td><li><a href="{%url 'userprofile:profile_publications_edit' publications_required_list.username publications_required_list.id %}">{{ publications_required_list.Description }}</li></td>
+
+         <td align="right">
+
+           <a href="{%url 'userprofile:profile_publications_edit' publications_required_list.username publications_required_list.id %}" style="color:red">
+          <button type="button" class="btn btn-success">Edit</button></a>
+
+           <a href="{%url 'userprofile:profile_publications_delete' publications_required_list.username publications_required_list.id %}"  style="color:red">
+          <button type="button" class="btn btn-warning">Delete</button></a>
+
+        </td>
+
       </tr>
 
 

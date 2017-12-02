@@ -15,7 +15,7 @@
 			</div>
 			<div class="profile_info">
 				<strong>
-				
+
 				<h2>{{ about_us.username.get_full_name  }}</h2>
 			</strong>
 			</div>
@@ -27,24 +27,7 @@
 			<div class="menu_section">
 				<h3>General</h3>
 				<ul class="nav side-menu">
-					<li><a><i class="fa fa-home"></i> Home </a>
 
-					</li>
-					<li><a><i class="fa fa-edit"></i> Departments <span class="fa fa-chevron-down"></span></a>
-						<ul class="nav child_menu">
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Biosciences_and_Bioengineering' %}">Biosciences and Bioengineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Chemical_Engineering' %}">Chemical Engineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Chemistry' %}">Chemistry</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Computer_Science_and_Engineering' %}">Computer Science and Engineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Civil_Engineering' %}">Civil Engineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Design' %}">Design</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Humanity_and_Social_Sciences' %}">Humanity and Social Sciences</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Electronics_and_Electrical_Engineering' %}">Electronics and Electrical Engineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Mathematics' %}">Mathematics</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Mechanical_Engineering' %}">Mechanical Engineering</a></li>
-							<li><a href="{% url 'userprofile:Departmentwise_list' 'Physics' %}">Physics</a></li>
-						</ul>
-					</li>
 					<li><a href="{% url 'userprofile:profile_about_us_logout_user' username_name %}"><i class="fa fa-desktop"></i> About </a>
 					</li>
 
@@ -63,20 +46,7 @@
 					<li><a href="{% url 'userprofile:profile_recognitions_logout_user' username_name %}"><i class="fa fa-clone"></i> Recognitions</a>
 					</li>
 
-					<li><a><i class="fa fa-clone"></i> Personal Page </a>
-					</li>
-				</ul>
-			</div>
 
-
-
-		</div>
-		<!-- /sidebar menu -->
-
-		<!-- /menu footer buttons -->
-
-	</div>
-</div>
 
 {% endblock %}
 
@@ -145,8 +115,8 @@
                           <th style="width: 20%">Project Name</th>
                           <th>Team Members</th>
                           <th>Project Progress</th>
-                          <th>Status</th>
-                          <th style="width: 20%">#Edit</th>
+                          <th>Funded</th>
+                          <!-- <th style="width: 20%">#Edit</th> -->
                         </tr>
                       </thead>
                       <tbody>
@@ -154,7 +124,7 @@
                         <tr>
                           <td>#</td>
                           <td>
-                            {% if projects_required_list.Project_Type %}
+                            {% if projects_required_list.Project_Type == 0 %}
           <li><a href="{%url 'userprofile:profile_projects_edit' projects_required_list.username projects_required_list.id %}">Project title : {{ projects_required_list.Project_title }}</a><br>
               Project Type  : {{ projects_required_list.Project_Type }}<br>
                         PI  : {{ projects_required_list.PI  }}<br>
@@ -166,60 +136,48 @@
             {% if End_Year != null %}:
                   End Year  : {{ projects_required_list.End_Year }} <br>
             {% endif %}
-
+            <!-- <a href="{%url 'userprofile:profile_projects_delete' projects_required_list.username projects_required_list.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a> -->
+          </a>
           </li>
-
       {% else %}
-			<ol>
-      <li>Project title : {{ projects_required_list.Project_title }}</li><br>
-						{% if  projects_required_list.Project_Type == False %}
-			        <li>  Project Type  : Consultancy Research Projects</li><br>
-						{% else %}
-							<li>  Project Type  : Sponsored Research Projects</li><br>
-						{% endif %}
-          <li>          PI  : {{ projects_required_list.PI  }}</li><br>
+      <li><a href="{%url 'userprofile:profile_projects_edit' projects_required_list.username projects_required_list.id %}">Project title : {{ projects_required_list.Project_title }}</a><br>
+          Project Type  : {{ projects_required_list.Project_Type }}<br>
+                    PI  : {{ projects_required_list.PI  }}<br>
             {% if co_PI != null %}:
-      <li>           co-PI  : {{ projects_required_list.co_PI }} </li><br>
+                 co-PI  : {{ projects_required_list.co_PI }} <br>
             {% endif %}
-      <li>  Funding Agency  : {{ projects_required_list.Funding_Agency  }}</li><br>
-      <li>      Start year  : {{projects_required_list.Start_year}}</li><br>
-		        {% if End_Year != null %}:
-		        <li>      End Year  : {{ projects_required_list.End_Year }}</li> <br>
-		        {% endif %}
-
-
+        Funding Agency  : {{ projects_required_list.Funding_Agency  }}<br>
+            Start year  : {{projects_required_list.Start_year}}<br>
+        {% if End_Year != null %}:
+              End Year  : {{ projects_required_list.End_Year }} <br>
+        {% endif %}
+        <!-- <a href="{%url 'userprofile:profile_projects_delete' projects_required_list.username projects_required_list.id %} " style="color:red"><i class="fa fa-trash"></i>delete</a> -->
+      </a>
+      </li>
       {% endif %}
                           </td>
                           <td>
                             <ul class="list-inline">
                               <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
+                                {{ projects_required_list.Team_Members }}
                               </li>
-                              <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
-                              </li>
-                              <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
-                              </li>
-                              <li>
-                                <img src="images/user.png" class="avatar" alt="Avatar">
-                              </li>
+
                             </ul>
                           </td>
                           <td class="project_progress">
                             <div class="progress progress_sm">
-                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ projects_required_list.Progress }}"></div>
                             </div>
-                            <small>57% Complete</small>
+                            <small>{{ projects_required_list.Progress }} % Complete</small>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                            {% if projects_required_list.Funding_Agency != "no"  %}
+                            <button type="button" class="btn btn-success btn-xs">Yes</button>
+                            {% else %}
+                            <button type="button" class="btn btn-danger btn-xs">No</button>
+                            {% endif %}
                           </td>
-                          <td>
-                            <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                            <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
-                          </td>
+
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -227,7 +185,7 @@
                     <!-- end project list -->
                     <hr>
 
-
+                    <!-- <a href="{%url 'userprofile:profile_projects_create' %}" class="btn btn-default">Add Projects</a> -->
 
                   </div>
                 </div>
@@ -266,5 +224,38 @@ ga('send', 'pageview');
 
 </script>
 
+
+
+
+{% endblock %}
+
+{% block content_top_nav %}
+{% if user.is_authenticated  %}
+<div class="top_nav">
+	<div class="nav_menu">
+		<nav>
+			<div class="nav toggle">
+				<a id="menu_toggle"><i class="fa fa-bars"></i></a>
+			</div>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="">
+					<a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<img src="{{ about_us.Upload_Profile_Pic.url }}" alt="">{{ user.get_full_name  }}
+						<span class=" fa fa-angle-down"></span>
+					</a>
+					<ul class="dropdown-menu dropdown-usermenu pull-right">
+						<li><a href="{% url 'test' user.username  %}"> Profile</a></li>
+						<li><a href="javascript:;">Help</a></li>
+						<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+					</ul>
+				</li>
+
+
+			</ul>
+		</nav>
+	</div>
+</div>
+{% endif %}
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import DetailView , ListView
-from .models import About_us , Teaching , Students , Projects , Publications , Recognitions
+from .models import About_us , Teaching , Students , Projects , Publications , Recognitions,Mail,Notification,NewsFeed
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
@@ -14,6 +14,15 @@ import functools
 
 user = get_user_model()
 # Create your views here.
+
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+quote_page = 'http://www.iitg.ernet.in/cse/internet-pages/santosh_biswas'
+# Create your views here.
+page = urlopen(quote_page)
+soup = BeautifulSoup(page, 'html.parser')
+
+
 
 def Departmentwise_list(request , slug):
         required_list = About_us.objects.filter(username__xyz__Department = slug).order_by('username__username')
@@ -103,9 +112,13 @@ def About_us_view_logout_user(request , slug ):
 def About_us_view(request , slug ):
     try:
         about_us = About_us.objects.get(username__username = slug)
+        notifications = Notification.objects.all()
+        ncount = Notification.objects.all().count()
         context = {
            'about_us': about_us,
            'username_name':slug,
+           'notifications':notifications,
+           'ncount':ncount,
         }
         return render(request, 'userprofile/detail_about_us.html', context)
     except:
@@ -119,7 +132,25 @@ def About_us_create(request):
             info = form.save(commit=False)
             info.username = request.user
             info.save()
-            return redirect('userprofile:profile_about_us', slug=request.user.username)
+            name_box = soup.find_all('ul')
+            j=0
+            pub_list = []
+            for i in name_box:
+                j = j+1
+                if(j==7):
+                    for li in i.findAll('li'):
+                        pub_list.append(li.get_text())
+            k=0
+            for i in pub_list:
+                k=k+1
+                if k==5:
+                    break
+                instance=Publications(username = request.user)
+                instance.Type = 0
+                instance.Description = i
+                instance.save()
+
+            return redirect('test', slug=request.user.username)
     else:
         form = about_us_form()
         return render(request , 'userprofile/about_us_edit.html' , {'form':form})
@@ -169,6 +200,8 @@ def Teaching_view_logout_user(request , slug ):
 def Teaching_view(request , slug ):
     Teaching_required_list = Teaching.objects.filter(username__username = slug).order_by('year')
     about_us = About_us.objects.get(username__username = slug)
+    notifications = Notification.objects.all()
+    ncount = Notification.objects.all().count()
 
     print(request.user)
     print(str(slug))
@@ -180,6 +213,8 @@ def Teaching_view(request , slug ):
             'about_us':about_us,
             'username':True,
             'username_name':slug,
+            'notifications':notifications,
+            'ncount':ncount,
         }
     else :
         context = {
@@ -187,6 +222,8 @@ def Teaching_view(request , slug ):
             'about_us':about_us,
             'username':False,
             'username_name':slug,
+            'notifications':notifications,
+            'ncount':ncount,
         }
 
     return render(request, 'userprofile/detail_teaching.html' , context)
@@ -274,6 +311,8 @@ def Students_view(request , slug ):
         mtech_ongo = Students_required_list.filter(Student_category=1)
         phd_cont = Students_required_list.filter(Student_category=2)
         phd_onog = Students_required_list.filter(Student_category=3)
+        notifications = Notification.objects.all()
+        ncount = Notification.objects.all().count()
 
 
         if str(request.user) == str(slug):
@@ -286,6 +325,8 @@ def Students_view(request , slug ):
                 'mtech_ongo':mtech_ongo,
                 'phd_cont':phd_cont,
                 'phd_onog':phd_onog,
+                'notifications':notifications,
+                'ncount':ncount,
             }
         else :
             context = {
@@ -293,10 +334,12 @@ def Students_view(request , slug ):
                 'about_us':about_us,
                 'username':False,
                 'username_name':slug,
-                    'mtech_cont':mtech_cont,
-                    'mtech_ongo':mtech_ongo,
-                    'phd_cont':phd_cont,
-                    'phd_onog':phd_onog,
+                'mtech_cont':mtech_cont,
+                'mtech_ongo':mtech_ongo,
+                'phd_cont':phd_cont,
+                'phd_onog':phd_onog,
+                'notifications':notifications,
+                'ncount':ncount,
             }
 
         return render(request, 'userprofile/detail_students.html' , context )
@@ -354,10 +397,15 @@ def Projects_view_logout_user(request , slug ):
 def Projects_view(request , slug ):
     projects_required_list = Projects.objects.filter(username__username = slug).order_by('Start_year')
     about_us = About_us.objects.get(username__username = slug)
+    notifications = Notification.objects.all()
+    ncount = Notification.objects.all().count()
+
     context = {
         'Projects_required_list':projects_required_list,
         'about_us':about_us,
         'username_name':slug,
+        'notifications':notifications,
+        'ncount':ncount,
     }
     return render(request, 'userprofile/detail_projects.html' , context)
 
@@ -423,6 +471,8 @@ def Publications_view(request , slug ):
     about_us = About_us.objects.get(username__username = slug)
     pub_pub = publications_required_list.filter(Type=0)
     pub_books = publications_required_list.filter(Type=1)
+    notifications = Notification.objects.all()
+    ncount = Notification.objects.all().count()
 
 
     context = {
@@ -431,6 +481,8 @@ def Publications_view(request , slug ):
         'about_us':about_us,
         'pub_pub':pub_pub,
         'pub_books':pub_books,
+        'notifications':notifications,
+        'ncount':ncount,
     }
     return render(request, 'userprofile/detail_publications.html' , context)
 
@@ -467,6 +519,22 @@ def Publications_create(request):
         return render(request , 'userprofile/publications_edit.html' , {'form':form})
 
 
+@login_required(login_url="/accounts/login/")
+def Publications_delete(request , slug , pk):
+    publications = Publications.objects.get( username__username=slug , pk=pk)
+    publications.delete()
+    return redirect('userprofile:profile_publications', slug)
+
+
+@login_required(login_url="/accounts/login/")
+def Recognitions_delete(request , slug , pk):
+    recognitions = Recognitions.objects.get( username__username=slug , pk=pk)
+    recognitions.delete()
+    return redirect('userprofile:profile_recognitions', slug)
+
+
+
+
 def Recognitions_view_logout_user(request , slug ):
     recognitions_required_list = Recognitions.objects.filter(username__username = slug)
     about_us = About_us.objects.get(username__username = slug)
@@ -483,14 +551,35 @@ def Recognitions_view_logout_user(request , slug ):
 def Recognitions_view(request , slug ):
     recognitions_required_list = Recognitions.objects.filter(username__username = slug)
     about_us = About_us.objects.get(username__username = slug)
+    notifications = Notification.objects.all()
+    ncount = Notification.objects.all().count()
 
 
     context = {
         'Recognitions_required_list':recognitions_required_list,
         'about_us':about_us,
         'username_name':slug,
+        'notifications':notifications,
+        'ncount':ncount,
     }
     return render(request, 'userprofile/detail_recognitions.html' , context)
+
+
+@login_required(login_url="/accounts/login/")
+def Recognitions_edit(request , slug , pk ):
+    recognitions = Recognitions.objects.get(username__username = slug , pk=pk)
+    if request.user.username == slug:
+        if request.method == "POST":
+            form = recognitions_form(request.POST, instance=recognitions)
+            if form.is_valid():
+                form.save()
+                return redirect('userprofile:profile_recognitions', slug)
+        else:
+            form = recognitions_form(instance=recognitions)
+            return render(request , 'userprofile/recognitions_edit.html' , {'form':form})
+    else:
+        return HttpResponse("Error. You are not authourized ")
+
 
 
 @login_required(login_url="/accounts/login/")
@@ -505,3 +594,31 @@ def Recognitions_create(request):
     else:
         form = recognitions_form()
         return render(request , 'userprofile/recognitions_edit.html' , {'form':form})
+
+
+@login_required(login_url="/accounts/login/")
+def notifications(request):
+    if request.method == 'GET':
+        notify_type = request.GET.get('param')
+        log  = Notification.objects.get(notify_type__iexact=notify_type).delete()
+        if notify_type == "promotion":
+            return redirect('userprofile:profile_about_us_edit',slug= request.user.username )
+        elif notify_type == "publication":
+            return redirect('userprofile:profile_publications_create')
+        elif notify_type == "project":
+            return redirect('userprofile:profile_projects_create')
+        elif notify_type == "course":
+            return redirect('userprofile:profile_teaching_create')
+
+@login_required(login_url="/accounts/login/")
+def newsFeed(request):
+    news = NewsFeed.objects.order_by('-created')
+    print("yes")
+    notifications = Notification.objects.all()
+    ncount = Notification.objects.all().count()
+    context = {
+        'news':news,
+        'notifications':notifications,
+        'ncount':ncount,
+    }
+    return render(request , 'test.html' ,context)

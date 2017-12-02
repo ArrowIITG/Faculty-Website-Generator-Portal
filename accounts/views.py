@@ -38,10 +38,15 @@ def login_user(request):
 
                 if result['success']:
                     login(request, user)
-                    try:
-                        return redirect('userprofile:profile_about_us' , slug=request.user)
-                    except:
-                        return redirect('userprofile:profile_about_us_create')
+                    # try:
+                    #     return redirect('test' , slug=request.user)
+                    # except:
+                    #     return redirect('userprofile:profile_about_us_create')
+                    if About_us.objects.filter(username=request.user).count() == 1:
+                        return redirect('test' , slug=request.user)
+                    else :
+                        return redirect('userprofile:profile_about_us_create')    
+
                 else:
                     return render(request, 'accounts/login.html', {'error_message': 'Invalid Captcha'})
 
