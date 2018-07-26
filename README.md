@@ -1,1 +1,2 @@
-# SSL_Project
+#A Django based portal to generate faculty website dynamically.
+
